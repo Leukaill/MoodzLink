@@ -26,6 +26,9 @@ export default function MoodMatchPage() {
     enabled: !!user,
   });
 
+  // Ensure currentMatches is always an array
+  const safeCurrentMatches = Array.isArray(currentMatches) ? currentMatches : [];
+
   const findMatchMutation = useMutation({
     mutationFn: async (moodEmoji: MoodEmoji) => {
       return apiRequest('POST', '/api/mood-matches/find', { moodEmoji });
@@ -148,7 +151,7 @@ export default function MoodMatchPage() {
               <CardTitle>Your Matches</CardTitle>
             </CardHeader>
             <CardContent>
-              {currentMatches.length === 0 ? (
+              {safeCurrentMatches.length === 0 ? (
                 <div className="text-center py-8">
                   <div className="text-4xl mb-3">💫</div>
                   <h3 className="font-medium text-gray-900 dark:text-white mb-1">
@@ -160,7 +163,7 @@ export default function MoodMatchPage() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {currentMatches.map((match) => (
+                  {safeCurrentMatches.map((match) => (
                     <motion.div
                       key={match.id}
                       initial={{ opacity: 0, scale: 0.95 }}

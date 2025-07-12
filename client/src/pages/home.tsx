@@ -37,6 +37,9 @@ export default function Home() {
     enabled: !!user,
   });
 
+  // Ensure posts is always an array
+  const safePosts = Array.isArray(posts) ? posts : [];
+
   const reactionMutation = useMutation({
     mutationFn: async ({ postId, emoji }: { postId: string; emoji: string }) => {
       return apiRequest('POST', `/api/reactions`, { postId, emoji });
@@ -135,7 +138,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-        ) : posts.length === 0 ? (
+        ) : safePosts.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -151,7 +154,7 @@ export default function Home() {
           </motion.div>
         ) : (
           <AnimatePresence mode="popLayout">
-            {posts.map((post) => (
+            {safePosts.map((post) => (
               <MoodPostCard
                 key={post.id}
                 post={post}

@@ -28,7 +28,9 @@ export default function Profile() {
     enabled: !!user,
   });
 
-  const userBadges = achievements.map(a => a.badgeType) as BadgeType[];
+  // Ensure achievements is always an array
+  const safeAchievements = Array.isArray(achievements) ? achievements : [];
+  const userBadges = safeAchievements.map(a => a.badgeType) as BadgeType[];
 
   if (!user || !userProfile) {
     return (
