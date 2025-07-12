@@ -16,6 +16,8 @@ import { uploadToCloudinary } from '@/lib/cloudinary';
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { useAuthContext } from '@/contexts/auth-context';
+import { supabase } from '@/lib/supabase';
 import { insertMoodPostSchema } from '@shared/schema';
 
 const createPostSchema = insertMoodPostSchema.extend({
@@ -27,6 +29,7 @@ type CreatePostForm = z.infer<typeof createPostSchema>;
 export default function CreatePost() {
   const [location, navigate] = useLocation();
   const { toast } = useToast();
+  const { user } = useAuthContext();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -43,7 +46,23 @@ export default function CreatePost() {
 
   const createPostMutation = useMutation({
     mutationFn: async (data: CreatePostForm & { mediaUrl?: string; mediaType?: string }) => {
-      return apiRequest('POST', '/api/mood-posts', data);
+      if (!user) throw new Error('Must be logged in to post');
+      
+      const { data: result, error } = await supabase
+        .from('mood_posts')
+        .insert({
+          user_id: user.id,
+          mood_emoji: data.moodEmoji,
+          text: data.text,
+          media_url: data.mediaUrl,
+          media_type: data.mediaType,
+          is_anonymous: data.isAnonymous,
+        })
+        .select()
+        .single();
+        
+      if (error) throw error;
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/mood-posts'] });

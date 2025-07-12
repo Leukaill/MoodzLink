@@ -14,6 +14,7 @@ import { useAuthContext } from '@/contexts/auth-context';
 import { AuthModal } from '@/components/auth/auth-modal';
 import { queryClient } from '@/lib/queryClient';
 import { apiRequest } from '@/lib/queryClient';
+import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
 export default function Home() {
@@ -35,6 +36,23 @@ export default function Home() {
   const { data: posts = [], isLoading, refetch } = useQuery<MoodPost[]>({
     queryKey: ['/api/mood-posts', filterMood],
     enabled: !!user,
+    queryFn: async () => {
+      let query = supabase
+        .from('mood_posts')
+        .select(`
+          *,
+          users!inner(nickname, is_anonymous)
+        `)
+        .order('created_at', { ascending: false });
+      
+      if (filterMood !== 'all') {
+        query = query.eq('mood_emoji', filterMood);
+      }
+      
+      const { data, error } = await query;
+      if (error) throw error;
+      return data || [];
+    },
   });
 
   // Ensure posts is always an array
@@ -42,7 +60,39 @@ export default function Home() {
 
   const reactionMutation = useMutation({
     mutationFn: async ({ postId, emoji }: { postId: string; emoji: string }) => {
-      return apiRequest('POST', `/api/reactions`, { postId, emoji });
+      if (!user) throw new Error('Must be logged in to react');
+      
+      // Check if user already reacted with this emoji
+      const { data: existingReaction } = await supabase
+        .from('reactions')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('post_id', postId)
+        .eq('emoji', emoji)
+        .single();
+      
+      if (existingReaction) {
+        // Remove existing reaction
+        const { error } = await supabase
+          .from('reactions')
+          .delete()
+          .eq('id', existingReaction.id);
+        if (error) throw error;
+        return { action: 'removed' };
+      } else {
+        // Add new reaction
+        const { data, error } = await supabase
+          .from('reactions')
+          .insert({
+            user_id: user.id,
+            post_id: postId,
+            emoji: emoji,
+          })
+          .select()
+          .single();
+        if (error) throw error;
+        return { action: 'added', data };
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/mood-posts'] });
