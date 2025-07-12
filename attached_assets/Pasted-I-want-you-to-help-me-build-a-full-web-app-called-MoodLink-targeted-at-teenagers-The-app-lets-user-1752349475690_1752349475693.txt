@@ -1,0 +1,103 @@
+I want you to help me build a full web app called MoodLink, targeted at teenagers. The app lets users post their mood (text, image, audio, or short video), anonymously or semi-anonymously, and interact with others through emoji reactions (🔥 😭 💀 🫶) and mood-based matching.
+
+The app must be:
+
+Fully written in TypeScript
+
+Serverless
+
+Use Firebase Firestore as the main database
+
+Use Firebase Auth for authentication
+
+Use Cloudinary for image/audio/video uploads (instead of Firebase Storage)
+
+Deployed on Vercel or Replit hosting
+
+🧩 Features for MVP:
+Authentication (Firebase Auth):
+
+Anonymous sign-in by default
+
+Optional Google/email login
+
+Allow users to set a nickname
+
+Post a Mood:
+
+Users can submit:
+
+Short text (max 300 chars)
+
+One media file (image, audio, or short video)
+
+One mood emoji (😶‍🌫️, 💀, 🥲, etc.)
+
+Media file is uploaded to Cloudinary via an unsigned preset
+
+The secure Cloudinary URL is stored in Firestore with the mood post
+
+Mood Feed:
+
+Displays all posts (newest first)
+
+Filters by mood emoji
+
+Each post shows:
+
+The mood emoji
+
+Timestamp ("5 min ago")
+
+Media preview (if any)
+
+Text (if any)
+
+Emoji reaction buttons (users can react once)
+
+Reactions:
+
+Stored in Firestore per post
+
+Real-time update of counts
+
+Prevent duplicate reactions from the same user
+
+Mood Match:
+
+Feature to "find someone who feels like me"
+
+Finds a recent post with the same emoji as your latest mood
+
+Opens a basic 1-on-1 chat (optional for MVP)
+
+Mood of the Day:
+
+User can upload one daily selfie/mood photo (like BeReal)
+
+Limited to 1 post per day (tracked via Firestore + timestamp)
+
+Also uploaded to Cloudinary
+
+🏗️ Tech Stack:
+Frontend: React + TypeScript + Tailwind CSS
+
+Backend: Firebase Firestore (serverless)
+
+Auth: Firebase Auth
+
+Media Upload: Cloudinary (via unsigned upload preset)
+
+State Management: React Context or Zustand
+
+Hosting: Vercel or Replit web preview
+
+Animations: Framer Motion (if needed)
+
+🔐 Firebase Rules:
+Only authenticated users can post or react
+
+Enforce 1 "Mood of the Day" post per user per day
+
+Reactions must be tied to user ID
+

@@ -1,0 +1,61 @@
+🎨 MoodLink Design – Clean, Modern & Attention-Grabbing
+1. Color Palette: Minimal & Elegant
+Use a neutral base: whites, light greys, soft off-whites
+
+Accent colors: one or two bold solid colors (like deep blue or vibrant coral) for buttons, emojis, and highlights
+
+Dark mode: charcoal backgrounds with light text and the same accent colors for consistency
+
+No gradients, just solid colors with strong contrast for clarity
+
+2. Typography: Crisp & Friendly
+Fonts like Inter, Roboto, or SF Pro Rounded — modern, highly readable, and approachable
+
+Use font weights smartly: bold for headings and emojis, regular/light for body text
+
+Generous line spacing and padding for a clean look and good legibility
+
+3. UI Elements: Spacious & Intuitive
+Lots of white space around cards and buttons so everything breathes
+
+Cards with subtle shadows and rounded corners (8px radius max), minimal borders
+
+Clean iconography: simple line icons or solid icons matching the accent color
+
+Buttons with clear outlines or filled with accent color, no over-the-top effects
+
+4. Animations & Micro-interactions: Subtle & Smooth
+Soft fade-ins and gentle scale-ups on hover or tap for buttons and cards
+
+Reaction emojis gently bounce or pulse when tapped—nothing flashy, just a smooth nudge
+
+Loading states with skeleton placeholders shaped like cards — minimal skeleton animations (e.g., subtle shimmer)
+
+5. Mood Selector: Simple & Focused
+Horizontal scroll carousel with clean circular emoji buttons
+
+Selected mood button gets a subtle solid background fill in the accent color, others remain outlined
+
+No flashy rotation or 3D, just smooth horizontal scrolling and crisp highlighting
+
+6. Daily Mood Photo UI
+Minimal fullscreen camera with transparent overlays for controls
+
+Clean circular capture button with accent color border and subtle scale animation on press
+
+Simple confirmation screen with clear Accept/Retake buttons
+
+7. Layout & Navigation
+Bottom tab bar with minimal icons and labels, accent color highlights active tab
+
+Floating action button (FAB) for posting mood: simple circle with accent color fill and a crisp icon
+
+Responsive design prioritizing mobile, with clean desktop adaptation (two-column feed maybe)
+
+8. Overall Feel
+Calm, uncluttered, inviting
+
+Designed to make users focus on content and emotions, not distractions
+
+A safe digital space that’s easy on the eyes but feels professional and slick
+
