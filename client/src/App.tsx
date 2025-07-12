@@ -12,6 +12,7 @@ import CreatePost from "@/pages/create-post";
 import Profile from "@/pages/profile";
 import MoodMatch from "@/pages/mood-match";
 import DailyPhoto from "@/pages/daily-photo";
+import AuthCallback from "@/pages/auth-callback";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/profile" component={Profile} />
       <Route path="/mood-match" component={MoodMatch} />
       <Route path="/daily-photo" component={DailyPhoto} />
+      <Route path="/auth/callback" component={AuthCallback} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

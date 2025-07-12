@@ -24,7 +24,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const [nickname, setNickname] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signInAnonymous } = useAuthContext();
+  const { signInAnonymous, signInWithGoogle } = useAuthContext();
   const { toast } = useToast();
 
   const handleAnonymousSignIn = async () => {
@@ -36,23 +36,9 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin
-        }
-      });
-      if (error) throw error;
-      onOpenChange(false);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Sign in failed",
-        description: error.message
-      });
-    }
+    await signInWithGoogle();
     setLoading(false);
+    onOpenChange(false);
   };
 
   const handleEmailSignIn = async () => {

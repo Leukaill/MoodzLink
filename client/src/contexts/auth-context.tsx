@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
-import { supabase, signInAnonymously } from '@/lib/supabase';
+import { supabase, signInAnonymously, signInWithGoogle } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInAnonymous: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -60,6 +61,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const signInWithGoogleAuth = async () => {
+    try {
+      const { error } = await signInWithGoogle();
+      if (error) throw error;
+      // No toast here as the user will be redirected
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Google Sign in failed",
+        description: error.message
+      });
+    }
+  };
+
   const signOut = async () => {
     try {
       const { error } = await supabase.auth.signOut();
@@ -81,6 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     loading,
     signInAnonymous,
+    signInWithGoogle: signInWithGoogleAuth,
     signOut,
   };
 
