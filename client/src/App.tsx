@@ -17,6 +17,7 @@ import Chat from "@/pages/chat";
 import DailyPhoto from "@/pages/daily-photo";
 import AuthCallback from "@/pages/auth-callback";
 import AuthVerify from "@/pages/auth-verify";
+import Onboarding from "@/pages/onboarding";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -32,6 +33,7 @@ function Router() {
       <Route path="/daily-photo" component={DailyPhoto} />
       <Route path="/auth/callback" component={AuthCallback} />
       <Route path="/auth/verify" component={AuthVerify} />
+      <Route path="/onboarding" component={Onboarding} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

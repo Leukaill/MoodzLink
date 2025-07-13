@@ -81,18 +81,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInEmail = async (email: string, password: string) => {
     try {
-      const { error } = await signInWithEmail(email, password);
+      const { data, error } = await signInWithEmail(email, password);
       if (error) throw error;
-      toast({
-        title: "Welcome back!",
-        description: "You're now signed in to MoodzLink."
-      });
+      
+      // Check if this is a new user who needs onboarding
+      if (data.user && data.user.user_metadata && !data.user.user_metadata.hasCompletedOnboarding) {
+        toast({
+          title: "Welcome to MoodzLink!",
+          description: "Let's set up your profile."
+        });
+      } else {
+        toast({
+          title: "Welcome back!",
+          description: "You're now signed in to MoodzLink."
+        });
+      }
+      
+      return data;
     } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Sign in failed",
         description: error.message
       });
+      throw error;
     }
   };
 

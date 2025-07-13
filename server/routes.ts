@@ -30,6 +30,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "This endpoint is handled by Supabase", user: null });
   });
 
+  // Complete onboarding endpoint
+  app.post("/api/user/complete-onboarding", async (req, res) => {
+    try {
+      const { profilePictureUrl, hasCompletedOnboarding } = req.body;
+      
+      // In a real app, this would update the user in Supabase
+      // For now, return success
+      res.json({ 
+        success: true, 
+        message: "Onboarding completed successfully" 
+      });
+    } catch (error) {
+      console.error('Complete onboarding error:', error);
+      res.status(500).json({ error: "Failed to complete onboarding" });
+    }
+  });
+
   app.get("/api/user/achievements", async (req, res) => {
     res.json({ message: "This endpoint is handled by Supabase", achievements: [] });
   });

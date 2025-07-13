@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, RefreshCw } from 'lucide-react';
 import { MoodPost, MOOD_EMOJIS } from '@shared/schema';
@@ -22,16 +23,20 @@ export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuthContext();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   // Set up real-time subscriptions
   useRealTimePosts();
 
-  // Check if user is authenticated on mount
+  // Check if user is authenticated and needs onboarding
   useEffect(() => {
     if (!user) {
       setShowAuthModal(true);
+    } else if (user && !user.is_anonymous && !user.user_metadata?.hasCompletedOnboarding) {
+      // Redirect email users who haven't completed onboarding
+      setLocation('/onboarding');
     }
-  }, [user]);
+  }, [user, setLocation]);
 
   const { data: posts = [], isLoading, refetch } = useQuery<MoodPost[]>({
     queryKey: ['/api/mood-posts', filterMood],

@@ -6,11 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { supabase } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
+import { User } from '@supabase/supabase-js';
 
 export default function AuthVerify() {
   const [, setLocation] = useLocation();
   const [status, setStatus] = useState<'loading' | 'success' | 'error' | 'waiting'>('loading');
   const [error, setError] = useState<string | null>(null);
+  const [verifiedUser, setVerifiedUser] = useState<User | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -40,15 +42,20 @@ export default function AuthVerify() {
       if (error) throw error;
 
       if (data.user) {
+        setVerifiedUser(data.user);
         setStatus('success');
         toast({
           title: "Email verified!",
           description: "Your account is now active. You can sign in.",
         });
 
-        // Redirect to home after a short delay
+        // Redirect to onboarding for new users, home for returning users
         setTimeout(() => {
-          setLocation('/');
+          if (data.user?.user_metadata?.hasCompletedOnboarding) {
+            setLocation('/');
+          } else {
+            setLocation('/onboarding');
+          }
         }, 2000);
       }
     } catch (err: any) {
@@ -148,10 +155,16 @@ export default function AuthVerify() {
                 Redirecting you to the app...
               </p>
               <Button
-                onClick={handleBackToSignIn}
+                onClick={() => {
+                  if (verifiedUser?.user_metadata?.hasCompletedOnboarding) {
+                    setLocation('/');
+                  } else {
+                    setLocation('/onboarding');
+                  }
+                }}
                 className="w-full"
               >
-                Continue to Sign In
+                Continue to App
               </Button>
             </motion.div>
           </CardContent>

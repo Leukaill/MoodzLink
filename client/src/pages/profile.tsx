@@ -84,7 +84,7 @@ export default function Profile() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                      {userProfile.nickname || 'Anonymous User'}
+                      {user?.user_metadata?.nickname || user?.email?.split('@')[0] || 'Anonymous User'}
                     </h2>
                     <Button
                       variant="ghost"
@@ -94,8 +94,13 @@ export default function Profile() {
                       <Edit className="h-4 w-4" />
                     </Button>
                   </div>
-                  <Badge variant={userProfile.isAnonymous ? "secondary" : "outline"}>
-                    {userProfile.isAnonymous ? 'Anonymous' : 'Public'}
+                  {user?.email && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                      {user.email}
+                    </p>
+                  )}
+                  <Badge variant={user?.is_anonymous ? "secondary" : "outline"}>
+                    {user?.is_anonymous ? 'Anonymous' : 'Registered'}
                   </Badge>
                 </div>
               </div>
