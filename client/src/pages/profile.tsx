@@ -14,7 +14,7 @@ import { BadgeDisplay } from '@/components/gamification/badge-display';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useTheme } from '@/contexts/theme-context';
 import { useToast } from '@/hooks/use-toast';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadToSupabase } from '@/lib/cloudinary';
 import { supabase } from '@/lib/supabase';
 import { User, Achievement, BadgeType } from '@shared/schema';
 
@@ -48,15 +48,26 @@ export default function Profile() {
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Validate file size (max 5MB for profile pictures)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        variant: "destructive",
+        title: "File too large",
+        description: "Please select a file smaller than 5MB"
+      });
+      return;
+    }
+
     setIsUploading(true);
     try {
-      const result = await uploadToCloudinary(file, 'profile_pictures');
+      const result = await uploadToSupabase(file, 'profile-pictures');
       setEditForm(prev => ({ ...prev, profilePicture: result.secure_url }));
       toast({
         title: "Picture uploaded!",
         description: "Your profile picture has been updated."
       });
     } catch (error) {
+      console.error('Profile picture upload error:', error);
       toast({
         variant: "destructive",
         title: "Upload failed",
@@ -69,14 +80,26 @@ export default function Profile() {
   const handleSaveProfile = async () => {
     setIsSaving(true);
     try {
-      const { error } = await supabase.auth.updateUser({
+      // Update user metadata in Supabase Auth
+      const { error: authError } = await supabase.auth.updateUser({
         data: {
           nickname: editForm.nickname,
           profilePictureUrl: editForm.profilePicture
         }
       });
 
-      if (error) throw error;
+      if (authError) throw authError;
+
+      // Also update the users table directly
+      const { error: dbError } = await supabase
+        .from('users')
+        .update({
+          nickname: editForm.nickname,
+          profile_picture_url: editForm.profilePicture
+        })
+        .eq('id', user?.id);
+
+      if (dbError) throw dbError;
 
       toast({
         title: "Profile updated!",
