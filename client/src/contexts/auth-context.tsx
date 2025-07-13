@@ -72,18 +72,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const signInAnonymous = async () => {
     try {
-      const { error } = await signInAnonymously();
-      if (error) throw error;
-      toast({
-        title: "Welcome to MoodzLink!",
-        description: "You're now signed in anonymously. Share your mood!"
-      });
-    } catch (error: any) {
+      console.log('Attempting anonymous sign in...');
+      const { data, error } = await signInAnonymously();
+      console.log('Anonymous sign in result:', { data, error });
+      
+      if (error) {
+        console.error('Anonymous sign in error:', error);
+        toast({
+          variant: "destructive",
+          title: "Sign in failed",
+          description: error.message || "Could not sign in anonymously"
+        });
+        throw error;
+      }
+      
+      console.log('Anonymous sign in successful');
+    } catch (error) {
+      console.error('Anonymous sign in failed:', error);
       toast({
         variant: "destructive",
-        title: "Sign in failed",
-        description: error.message
+        title: "Sign in failed", 
+        description: error instanceof Error ? error.message : "Unknown error"
       });
+      throw error;
     }
   };
 

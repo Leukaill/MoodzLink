@@ -15,6 +15,14 @@ export const uploadToSupabase = async (
   file: File,
   bucket: string = 'media-files'
 ): Promise<SupabaseUploadResult> => {
+  console.log('Starting upload to Supabase:', { fileName: file.name, size: file.size, type: file.type, bucket });
+  
+  // Check authentication first
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    throw new Error('User must be authenticated to upload files');
+  }
+  
   // Generate unique filename
   const fileExt = file.name.split('.').pop();
   const fileName = `${nanoid()}.${fileExt}`;
@@ -29,6 +37,8 @@ export const uploadToSupabase = async (
     resourceType = 'audio';
   }
 
+  console.log('Uploading with details:', { fileName, resourceType, userId: user.id });
+
   // Upload to Supabase Storage
   const { data, error } = await supabase.storage
     .from(bucket)
@@ -38,13 +48,18 @@ export const uploadToSupabase = async (
     });
 
   if (error) {
+    console.error('Upload error:', error);
     throw new Error(`Failed to upload file to Supabase: ${error.message}`);
   }
+
+  console.log('Upload successful:', data);
 
   // Get public URL
   const { data: urlData } = supabase.storage
     .from(bucket)
     .getPublicUrl(fileName);
+
+  console.log('Public URL:', urlData.publicUrl);
 
   return {
     public_id: fileName,
