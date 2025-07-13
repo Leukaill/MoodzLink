@@ -130,3 +130,11 @@ The architecture prioritizes real-time user experience, content safety, and scal
 - Enhanced database schema with swipes, matches, chat_messages, and message_reports tables
 - Replaced Google OAuth with email/password authentication including email verification
 - Updated authentication flow with nickname field and form validation
+
+### January 2025 - Migration to Replit & Supabase Storage
+- Successfully migrated project from Replit Agent to standard Replit environment
+- Replaced Cloudinary media storage with Supabase Storage for all file uploads
+- Updated file upload functions in create-post, daily-photo, and onboarding pages
+- Maintained backwards compatibility with existing upload interfaces
+- App now runs cleanly on port 5000 with proper client/server separation
+- All authentication and real-time features continue to use Supabase

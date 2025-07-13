@@ -9,7 +9,7 @@ import { MoodSelector } from '@/components/mood/mood-selector';
 import { useLocation } from 'wouter';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useToast } from '@/hooks/use-toast';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadToSupabase } from '@/lib/cloudinary';
 import { supabase } from '@/lib/supabase';
 import { MoodEmoji } from '@shared/schema';
 
@@ -56,7 +56,7 @@ export default function Onboarding() {
 
     setIsUploading(true);
     try {
-      const result = await uploadToCloudinary(file, 'profile_pictures');
+      const result = await uploadToSupabase(file, 'profile-pictures');
       setProfilePicture(result.secure_url);
       toast({
         title: "Picture uploaded!",

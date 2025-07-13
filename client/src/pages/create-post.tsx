@@ -12,7 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { MoodSelector } from '@/components/mood/mood-selector';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadToSupabase } from '@/lib/cloudinary';
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -130,7 +130,7 @@ export default function CreatePost() {
     if (selectedFile) {
       setIsUploading(true);
       try {
-        const result = await uploadToCloudinary(selectedFile);
+        const result = await uploadToSupabase(selectedFile);
         mediaUrl = result.secure_url;
         mediaType = selectedFile.type.startsWith('video/') ? 'video' :
                    selectedFile.type.startsWith('audio/') ? 'audio' : 'image';

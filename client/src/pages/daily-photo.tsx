@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { MoodSelector } from '@/components/mood/mood-selector';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadToSupabase } from '@/lib/cloudinary';
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
@@ -121,8 +121,8 @@ export default function DailyPhotoPage() {
       const blob = await response.blob();
       const file = new File([blob], `daily-photo-${today}.jpg`, { type: 'image/jpeg' });
 
-      // Upload to Cloudinary
-      const result = await uploadToCloudinary(file);
+      // Upload to Supabase
+      const result = await uploadToSupabase(file);
 
       // Submit to backend
       await uploadPhotoMutation.mutateAsync({
