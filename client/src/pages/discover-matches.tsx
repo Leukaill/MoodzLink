@@ -36,10 +36,14 @@ export default function DiscoverMatches() {
   const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(null);
 
   // Fetch potential matches for the selected mood
-  const { data: potentialMatches = [], isLoading } = useQuery({
+  const { data: matchesResponse, isLoading } = useQuery({
     queryKey: ['/api/potential-matches', selectedMood],
     enabled: !!selectedMood && !!user,
   });
+
+  // Ensure potentialMatches is always an array
+  const potentialMatches = Array.isArray(matchesResponse) ? matchesResponse : 
+                          (matchesResponse?.potentialMatches && Array.isArray(matchesResponse.potentialMatches)) ? matchesResponse.potentialMatches : [];
 
   // Swipe mutation
   const swipeMutation = useMutation({

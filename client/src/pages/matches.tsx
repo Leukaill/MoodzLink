@@ -21,10 +21,14 @@ export default function Matches() {
   const { user } = useAuth();
 
   // Fetch user's matches
-  const { data: matches = [], isLoading } = useQuery<MatchWithUser[]>({
+  const { data: matchesResponse, isLoading } = useQuery({
     queryKey: ['/api/matches'],
     enabled: !!user,
   });
+
+  // Ensure matches is always an array
+  const matches = Array.isArray(matchesResponse) ? matchesResponse : 
+                  (matchesResponse?.matches && Array.isArray(matchesResponse.matches)) ? matchesResponse.matches : [];
 
   const handleOpenChat = (matchId: string) => {
     setLocation(`/chat/${matchId}`);

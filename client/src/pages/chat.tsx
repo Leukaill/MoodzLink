@@ -64,11 +64,15 @@ export default function Chat() {
   });
 
   // Fetch messages with expiration info
-  const { data: messages = [], isLoading } = useQuery<MessageWithExpiration[]>({
+  const { data: messagesResponse, isLoading } = useQuery({
     queryKey: ['/api/matches', matchId, 'messages'],
     enabled: !!matchId,
     refetchInterval: 30000, // Refresh every 30 seconds for expiration updates
   });
+
+  // Ensure messages is always an array
+  const messages = Array.isArray(messagesResponse) ? messagesResponse : 
+                  (messagesResponse?.messages && Array.isArray(messagesResponse.messages)) ? messagesResponse.messages : [];
 
   // Send message mutation
   const sendMessageMutation = useMutation({
