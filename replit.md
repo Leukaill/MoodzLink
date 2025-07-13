@@ -1,8 +1,8 @@
-# MoodLink - Mood Sharing App for Teenagers
+# MoodzLink - Mood Sharing App for Teenagers
 
 ## Overview
 
-MoodLink is a modern web application designed for teenagers to share their moods and connect with others. The app allows users to post text, images, audio, or short videos alongside mood emojis, interact through reactions, and discover mood matches. The application emphasizes anonymity and safe social interaction with gamification elements to encourage engagement.
+MoodzLink is a modern web application designed for teenagers to share their moods and connect with others. The app allows users to post text, images, audio, or short videos alongside mood emojis, interact through reactions, and discover mood matches. The application emphasizes anonymity and safe social interaction with gamification elements to encourage engagement.
 
 ## User Preferences
 

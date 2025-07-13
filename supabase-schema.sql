@@ -1,4 +1,4 @@
--- MoodLink Database Schema for Supabase
+-- MoodzLink Database Schema for Supabase
 -- Run this in your Supabase SQL editor
 
 -- Enable UUID extension

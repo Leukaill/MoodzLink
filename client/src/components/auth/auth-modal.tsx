@@ -72,7 +72,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Welcome to MoodLink</DialogTitle>
+          <DialogTitle>Welcome to MoodzLink</DialogTitle>
           <DialogDescription>
             Share your mood and connect with others who feel the same way.
           </DialogDescription>

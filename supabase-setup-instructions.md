@@ -1,4 +1,4 @@
-# Supabase Setup Instructions for MoodLink
+# Supabase Setup Instructions for MoodzLink
 
 ## Critical Steps to Complete:
 

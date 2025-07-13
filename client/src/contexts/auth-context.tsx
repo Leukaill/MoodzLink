@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { error } = await signInAnonymously();
       if (error) throw error;
       toast({
-        title: "Welcome to MoodLink!",
+        title: "Welcome to MoodzLink!",
         description: "You're now signed in anonymously. Share your mood!"
       });
     } catch (error: any) {

@@ -8,7 +8,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Health check endpoint
   app.get("/api/health", (_req, res) => {
-    res.json({ status: "ok", message: "MoodLink API is running" });
+    res.json({ status: "ok", message: "MoodzLink API is running" });
   });
 
   // Placeholder endpoints for development

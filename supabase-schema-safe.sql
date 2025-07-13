@@ -1,4 +1,4 @@
--- MoodLink Database Schema - Safe version that handles existing tables
+-- MoodzLink Database Schema - Safe version that handles existing tables
 -- Run this in your Supabase SQL editor
 
 -- Enable UUID extension (safe to run multiple times)
