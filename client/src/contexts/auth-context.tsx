@@ -112,10 +112,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
+      
+      // Clear any cached data and redirect to home
+      setUser(null);
       toast({
         title: "Signed out",
         description: "Come back soon!"
       });
+      
+      // Redirect to home will trigger auth modal
+      window.location.href = '/';
     } catch (error: any) {
       toast({
         variant: "destructive",

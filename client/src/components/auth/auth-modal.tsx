@@ -89,13 +89,8 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
         onOpenChange(false);
         setLocation('/auth/verify');
       } else {
-        const result = await signInEmail(formData.email, formData.password);
+        await signInEmail(formData.email, formData.password);
         onOpenChange(false);
-        
-        // Check if user needs onboarding after successful sign in
-        if (result?.user && !result.user.user_metadata?.hasCompletedOnboarding) {
-          setLocation('/onboarding');
-        }
       }
     } catch (error) {
       console.error('Auth error:', error);
