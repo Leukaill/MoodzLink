@@ -50,6 +50,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "This endpoint is handled by Supabase", photo: null });
   });
 
+  // Matching system endpoints
+  app.get("/api/potential-matches/:moodEmoji", async (req, res) => {
+    res.json({ message: "This endpoint is handled by Supabase", potentialMatches: [] });
+  });
+
+  app.post("/api/swipes", async (req, res) => {
+    res.json({ message: "This endpoint is handled by Supabase", success: true, matched: false });
+  });
+
+  app.get("/api/matches", async (req, res) => {
+    res.json({ message: "This endpoint is handled by Supabase", matches: [] });
+  });
+
+  // Messaging endpoints
+  app.get("/api/matches/:matchId/messages", async (req, res) => {
+    res.json({ message: "This endpoint is handled by Supabase", messages: [] });
+  });
+
+  app.post("/api/matches/:matchId/messages", async (req, res) => {
+    res.json({ message: "This endpoint is handled by Supabase", success: true });
+  });
+
+  app.post("/api/messages/:messageId/report", async (req, res) => {
+    res.json({ message: "This endpoint is handled by Supabase", success: true });
+  });
+
+  app.delete("/api/messages/expired", async (req, res) => {
+    res.json({ message: "This endpoint is handled by Supabase", deletedCount: 0 });
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

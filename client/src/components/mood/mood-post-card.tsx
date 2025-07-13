@@ -3,17 +3,29 @@ import { motion } from 'framer-motion';
 import { MoodPost } from '@shared/schema';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { MediaPreview } from './media-preview';
 import { EmojiReactions } from './emoji-reactions';
 import { useRealTimeReactions } from '@/hooks/use-real-time';
+import { useAuth } from '@/hooks/use-auth';
+import { Heart } from 'lucide-react';
+import { useLocation } from 'wouter';
 
 interface MoodPostCardProps {
   post: MoodPost;
   onReaction?: (postId: string, emoji: string) => void;
+  showMatchButton?: boolean;
 }
 
-export function MoodPostCard({ post, onReaction }: MoodPostCardProps) {
+export function MoodPostCard({ post, onReaction, showMatchButton = true }: MoodPostCardProps) {
+  const [, setLocation] = useLocation();
+  const { user } = useAuth();
   useRealTimeReactions(post.id);
+
+  const handleMatchClick = () => {
+    if (!user) return;
+    setLocation(`/discover-matches?mood=${post.moodEmoji}&fromPost=${post.id}`);
+  };
 
   return (
     <motion.div
@@ -57,12 +69,27 @@ export function MoodPostCard({ post, onReaction }: MoodPostCardProps) {
             />
           )}
 
-          {/* Reactions */}
-          <EmojiReactions
-            postId={post.id}
-            counts={post.reactionCounts as Record<string, number> || {}}
-            onReaction={onReaction}
-          />
+          {/* Actions */}
+          <div className="flex items-center justify-between">
+            <EmojiReactions
+              postId={post.id}
+              counts={post.reactionCounts as Record<string, number> || {}}
+              onReaction={onReaction}
+              className="flex-1"
+            />
+            
+            {showMatchButton && user && post.userId !== user.id && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleMatchClick}
+                className="text-pink-500 hover:text-pink-600 hover:bg-pink-50 dark:hover:bg-pink-900/20"
+              >
+                <Heart className="h-4 w-4 mr-1" />
+                Match
+              </Button>
+            )}
+          </div>
         </CardContent>
       </Card>
     </motion.div>

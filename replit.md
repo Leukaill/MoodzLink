@@ -32,6 +32,10 @@ The application uses a PostgreSQL schema with the following main tables:
 - `mood_posts`: User mood posts with media and metadata
 - `reactions`: Emoji reactions to posts
 - `daily_photos`: BeReal-style daily photo feature
+- `swipes`: Tinder-style swipe actions (left/right) between users
+- `matches`: Created when both users swipe right on each other
+- `chat_messages`: Messages between matched users with 24-hour expiration
+- `message_reports`: Safety reporting system for inappropriate content
 
 ## Key Components
 
@@ -50,9 +54,11 @@ The application uses a PostgreSQL schema with the following main tables:
 
 ### Social Features
 - Emoji reactions (🔥, 😭, 💀, 🫶)
-- Mood-based matching system
+- Tinder-style mood-based matching system with swiping
+- Direct messaging between matched users (24-hour message expiration)
 - Daily photo challenges (BeReal-style)
 - Real-time notifications and updates
+- Message reporting and safety features
 
 ### Gamification Elements
 - Daily posting streaks
@@ -112,3 +118,13 @@ The application uses a PostgreSQL schema with the following main tables:
 - CDN integration via Cloudinary for media assets
 
 The architecture prioritizes real-time user experience, content safety, and scalability while maintaining a clean, maintainable codebase suitable for a teenage audience's social interaction patterns.
+
+## Recent Changes
+
+### December 2024 - Messaging and Matching System
+- Added comprehensive Tinder-style matching system where users can swipe on potential matches
+- Implemented direct messaging between matched users with 24-hour message expiration
+- Added swipe functionality from mood posts and dedicated matching discovery page
+- Created safety features including message reporting system
+- Updated navigation to include dedicated Matches/Chats section
+- Enhanced database schema with swipes, matches, chat_messages, and message_reports tables

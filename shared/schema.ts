@@ -56,22 +56,48 @@ export const achievements = pgTable("achievements", {
   earnedAt: timestamp("earned_at").defaultNow(),
 });
 
-// Mood matches for the "find someone who feels like me" feature
-export const moodMatches = pgTable("mood_matches", {
+// Swipes table for Tinder-style matching
+export const swipes = pgTable("swipes", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  swiperId: uuid("swiper_id").references(() => users.id).notNull(),
+  swipedId: uuid("swiped_id").references(() => users.id).notNull(),
+  postId: uuid("post_id").references(() => moodPosts.id), // Optional: swipe from a specific post
+  direction: text("direction").notNull(), // 'left' or 'right'
+  moodEmoji: text("mood_emoji").notNull(), // The mood that triggered the match opportunity
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Matches table - created when both users swipe right
+export const matches = pgTable("matches", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId1: uuid("user_id_1").references(() => users.id).notNull(),
   userId2: uuid("user_id_2").references(() => users.id).notNull(),
-  moodEmoji: text("mood_emoji").notNull(),
+  moodEmoji: text("mood_emoji").notNull(), // The mood that brought them together
   createdAt: timestamp("created_at").defaultNow(),
   isActive: boolean("is_active").default(true),
+  lastMessageAt: timestamp("last_message_at"),
 });
 
-// Chat messages for mood matches
+// Chat messages for matches with 24h expiration and media support
 export const chatMessages = pgTable("chat_messages", {
   id: uuid("id").primaryKey().defaultRandom(),
-  matchId: uuid("match_id").references(() => moodMatches.id).notNull(),
+  matchId: uuid("match_id").references(() => matches.id).notNull(),
   senderId: uuid("sender_id").references(() => users.id).notNull(),
-  message: text("message").notNull(),
+  messageType: text("message_type").notNull().default("text"), // 'text', 'image', 'audio', 'video', 'emoji'
+  content: text("content").notNull(), // Text content or media URL
+  moodEmoji: text("mood_emoji"), // Optional mood emoji with message
+  createdAt: timestamp("created_at").defaultNow(),
+  expiresAt: timestamp("expires_at").notNull(), // 24 hours from creation
+  isRead: boolean("is_read").default(false),
+});
+
+// Message reports for safety
+export const messageReports = pgTable("message_reports", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  reporterId: uuid("reporter_id").references(() => users.id).notNull(),
+  messageId: uuid("message_id").references(() => chatMessages.id).notNull(),
+  reason: text("reason").notNull(), // 'inappropriate', 'spam', 'harassment', etc.
+  description: text("description"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -105,12 +131,24 @@ export const insertAchievementSchema = createInsertSchema(achievements).omit({
   earnedAt: true,
 });
 
-export const insertMoodMatchSchema = createInsertSchema(moodMatches).omit({
+export const insertSwipeSchema = createInsertSchema(swipes).omit({
   id: true,
   createdAt: true,
 });
 
+export const insertMatchSchema = createInsertSchema(matches).omit({
+  id: true,
+  createdAt: true,
+  lastMessageAt: true,
+});
+
 export const insertChatMessageSchema = createInsertSchema(chatMessages).omit({
+  id: true,
+  createdAt: true,
+  expiresAt: true,
+});
+
+export const insertMessageReportSchema = createInsertSchema(messageReports).omit({
   id: true,
   createdAt: true,
 });
@@ -126,10 +164,14 @@ export type DailyPhoto = typeof dailyPhotos.$inferSelect;
 export type InsertDailyPhoto = z.infer<typeof insertDailyPhotoSchema>;
 export type Achievement = typeof achievements.$inferSelect;
 export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
-export type MoodMatch = typeof moodMatches.$inferSelect;
-export type InsertMoodMatch = z.infer<typeof insertMoodMatchSchema>;
+export type Swipe = typeof swipes.$inferSelect;
+export type InsertSwipe = z.infer<typeof insertSwipeSchema>;
+export type Match = typeof matches.$inferSelect;
+export type InsertMatch = z.infer<typeof insertMatchSchema>;
 export type ChatMessage = typeof chatMessages.$inferSelect;
 export type InsertChatMessage = z.infer<typeof insertChatMessageSchema>;
+export type MessageReport = typeof messageReports.$inferSelect;
+export type InsertMessageReport = z.infer<typeof insertMessageReportSchema>;
 
 // Mood emojis enum
 export const MOOD_EMOJIS = [

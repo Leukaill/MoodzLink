@@ -13,11 +13,12 @@ import { MoodMatch, MoodEmoji } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { Link } from 'wouter';
+import { Link, useLocation } from 'wouter';
 
 export default function MoodMatchPage() {
   const [selectedMood, setSelectedMood] = useState<MoodEmoji>('😶‍🌫️');
   const [isSearching, setIsSearching] = useState(false);
+  const [, setLocation] = useLocation();
   const { user } = useAuthContext();
   const { toast } = useToast();
 
@@ -59,8 +60,7 @@ export default function MoodMatchPage() {
   });
 
   const handleFindMatch = () => {
-    setIsSearching(true);
-    findMatchMutation.mutate(selectedMood);
+    setLocation(`/discover-matches?mood=${selectedMood}`);
   };
 
   if (!user) {
