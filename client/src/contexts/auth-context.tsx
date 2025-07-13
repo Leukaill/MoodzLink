@@ -40,6 +40,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
+      
+      // Sync user data with our users table when user signs in
+      if (event === 'SIGNED_IN' && session?.user) {
+        try {
+          // Check if user exists in our users table
+          const { data: existingUser } = await supabase
+            .from('users')
+            .select('id')
+            .eq('id', session.user.id)
+            .single();
+
+          // If user doesn't exist, create them
+          if (!existingUser) {
+            await supabase.from('users').insert({
+              id: session.user.id,
+              email: session.user.email,
+              nickname: session.user.user_metadata?.nickname || 'Anonymous',
+              is_anonymous: session.user.user_metadata?.isAnonymous || session.user.is_anonymous || false,
+              has_completed_onboarding: false
+            });
+          }
+        } catch (error) {
+          console.error('Error syncing user data:', error);
+        }
+      }
     });
 
     return () => subscription.unsubscribe();

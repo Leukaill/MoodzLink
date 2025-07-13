@@ -19,7 +19,14 @@ export const getCurrentUser = () => {
 
 // Helper function to sign in anonymously
 export const signInAnonymously = async () => {
-  const { data, error } = await supabase.auth.signInAnonymously();
+  const { data, error } = await supabase.auth.signInAnonymously({
+    options: {
+      data: {
+        nickname: 'Anonymous',
+        isAnonymous: true,
+      }
+    }
+  });
   return { data, error };
 };
 
