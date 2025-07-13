@@ -33,9 +33,18 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
   const handleAnonymousSignIn = async () => {
     setIsLoading(true);
-    await signInAnonymous();
+    try {
+      await signInAnonymous();
+      onOpenChange(false);
+    } catch (error) {
+      console.error('Anonymous sign in error:', error);
+      toast({
+        variant: "destructive",
+        title: "Sign in failed",
+        description: "Please try again."
+      });
+    }
     setIsLoading(false);
-    onOpenChange(false);
   };
 
   const validateForm = () => {

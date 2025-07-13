@@ -32,9 +32,12 @@ export default function Home() {
   useEffect(() => {
     if (!user) {
       setShowAuthModal(true);
-    } else if (user && !user.is_anonymous && !user.user_metadata?.hasCompletedOnboarding) {
-      // Redirect email users who haven't completed onboarding
-      setLocation('/onboarding');
+    } else {
+      setShowAuthModal(false);
+      if (user && !user.is_anonymous && !user.user_metadata?.hasCompletedOnboarding) {
+        // Redirect email users who haven't completed onboarding
+        setLocation('/onboarding');
+      }
     }
   }, [user, setLocation]);
 

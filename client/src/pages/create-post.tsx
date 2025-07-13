@@ -35,6 +35,12 @@ export default function CreatePost() {
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Redirect if user is not authenticated
+  if (!user) {
+    navigate('/');
+    return null;
+  }
+
   const form = useForm<CreatePostForm>({
     resolver: zodResolver(createPostSchema),
     defaultValues: {
