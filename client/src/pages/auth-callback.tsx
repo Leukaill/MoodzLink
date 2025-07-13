@@ -9,6 +9,7 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
+        // This page is mainly for compatibility, but can handle general auth redirects
         const { data, error } = await supabase.auth.getSession();
         
         if (error) {
@@ -38,7 +39,7 @@ export default function AuthCallback() {
       <div className="text-center">
         <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-purple-600" />
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-          Signing you in...
+          Completing authentication...
         </h2>
         <p className="text-gray-600 dark:text-gray-300">
           Just a moment while we complete your authentication.

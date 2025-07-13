@@ -13,12 +13,12 @@
 2. Copy the entire content from `supabase-schema.sql`
 3. Paste it and click **Run**
 
-### 3. Configure Site URL (for Google Auth later)
+### 3. Configure Site URL (for email verification)
 1. Go to **Authentication** → **URL Configuration**
 2. Set **Site URL** to: `https://[your-replit-domain].replit.app`
 3. Add **Redirect URLs**:
-   - `https://[your-replit-domain].replit.app/auth/callback`
-   - `http://localhost:5000/auth/callback`
+   - `https://[your-replit-domain].replit.app/auth/verify`
+   - `http://localhost:5000/auth/verify`
 
 ## Current Status:
 ❌ Anonymous sign-ins: DISABLED (needs to be enabled)
@@ -28,5 +28,5 @@
 
 ## After completing these steps:
 - Anonymous authentication will work immediately
-- Google auth can be configured later
+- Email/password authentication with verification is now configured
 - All app features will be functional

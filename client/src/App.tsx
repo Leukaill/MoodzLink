@@ -16,6 +16,7 @@ import Matches from "@/pages/matches";
 import Chat from "@/pages/chat";
 import DailyPhoto from "@/pages/daily-photo";
 import AuthCallback from "@/pages/auth-callback";
+import AuthVerify from "@/pages/auth-verify";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/chat/:matchId" component={Chat} />
       <Route path="/daily-photo" component={DailyPhoto} />
       <Route path="/auth/callback" component={AuthCallback} />
+      <Route path="/auth/verify" component={AuthVerify} />
       {/* Fallback to 404 */}
       <Route component={NotFound} />
     </Switch>

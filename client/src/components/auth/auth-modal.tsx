@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useAuthContext } from '@/contexts/auth-context';
 import { useToast } from '@/hooks/use-toast';
+import { useLocation } from 'wouter';
 
 interface AuthModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
 
   const { signInAnonymous, signUpEmail, signInEmail } = useAuthContext();
   const { toast } = useToast();
+  const [, setLocation] = useLocation();
 
   const handleAnonymousSignIn = async () => {
     setIsLoading(true);
@@ -83,6 +85,9 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     try {
       if (isSignUp) {
         await signUpEmail(formData.email, formData.password, formData.nickname);
+        // Redirect to verification page after successful signup
+        onOpenChange(false);
+        setLocation('/auth/verify');
       } else {
         await signInEmail(formData.email, formData.password);
         onOpenChange(false);

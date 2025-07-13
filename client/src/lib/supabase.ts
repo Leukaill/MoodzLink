@@ -29,6 +29,7 @@ export const signUpWithEmail = async (email: string, password: string, nickname:
     email,
     password,
     options: {
+      emailRedirectTo: `${window.location.origin}/auth/verify`,
       data: {
         nickname,
         isAnonymous: false,
