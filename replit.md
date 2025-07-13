@@ -41,7 +41,7 @@ The application uses a PostgreSQL schema with the following main tables:
 
 ### Authentication System
 - Anonymous sign-in by default for privacy
-- Optional Google OAuth for persistent accounts
+- Email/password authentication with email verification for persistent accounts
 - User nicknames for personalization while maintaining anonymity
 - Supabase handles session management and security
 
@@ -128,3 +128,5 @@ The architecture prioritizes real-time user experience, content safety, and scal
 - Created safety features including message reporting system
 - Updated navigation to include dedicated Matches/Chats section
 - Enhanced database schema with swipes, matches, chat_messages, and message_reports tables
+- Replaced Google OAuth with email/password authentication including email verification
+- Updated authentication flow with nickname field and form validation

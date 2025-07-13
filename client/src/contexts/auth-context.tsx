@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '@supabase/supabase-js';
-import { supabase, signInAnonymously, signInWithGoogle } from '@/lib/supabase';
+import { supabase, signInAnonymously, signUpWithEmail, signInWithEmail } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   signInAnonymous: () => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signUpEmail: (email: string, password: string, nickname: string) => Promise<void>;
+  signInEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -61,15 +62,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const signInWithGoogleAuth = async () => {
+  const signUpEmail = async (email: string, password: string, nickname: string) => {
     try {
-      const { error } = await signInWithGoogle();
+      const { error } = await signUpWithEmail(email, password, nickname);
       if (error) throw error;
-      // No toast here as the user will be redirected
+      toast({
+        title: "Check your email!",
+        description: "We sent you a verification link to complete your registration."
+      });
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Google Sign in failed",
+        title: "Sign up failed",
+        description: error.message
+      });
+    }
+  };
+
+  const signInEmail = async (email: string, password: string) => {
+    try {
+      const { error } = await signInWithEmail(email, password);
+      if (error) throw error;
+      toast({
+        title: "Welcome back!",
+        description: "You're now signed in to MoodzLink."
+      });
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Sign in failed",
         description: error.message
       });
     }
@@ -96,7 +117,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     user,
     loading,
     signInAnonymous,
-    signInWithGoogle: signInWithGoogleAuth,
+    signUpEmail,
+    signInEmail,
     signOut,
   };
 

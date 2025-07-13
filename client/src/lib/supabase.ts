@@ -23,17 +23,35 @@ export const signInAnonymously = async () => {
   return { data, error };
 };
 
-// Helper function to sign in with Google
-export const signInWithGoogle = async () => {
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+// Helper function to sign up with email
+export const signUpWithEmail = async (email: string, password: string, nickname: string) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
     options: {
-      redirectTo: `${window.location.origin}/auth/callback`,
-      queryParams: {
-        access_type: 'offline',
-        prompt: 'consent',
+      data: {
+        nickname,
+        isAnonymous: false,
       }
     }
+  });
+  return { data, error };
+};
+
+// Helper function to sign in with email
+export const signInWithEmail = async (email: string, password: string) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  return { data, error };
+};
+
+// Helper function to resend email verification
+export const resendEmailVerification = async (email: string) => {
+  const { data, error } = await supabase.auth.resend({
+    type: 'signup',
+    email,
   });
   return { data, error };
 };
